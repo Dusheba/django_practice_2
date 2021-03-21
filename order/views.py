@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from djangoTask.helpers import SuccessfulResponse, ERROR
 from order.models import Order
 
 
@@ -14,36 +15,33 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderList(APIView):
+class OrderListCreateAPIView(APIView):
     def get(self, request):
         queryset = Order.objects.all()
         serializer = OrderSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return SuccessfulResponse(serializer.data)
 
-
-class OrderCreate(APIView):
     def post(self, request):
         serializer = OrderSerializer(data=request.POST)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return HttpResponse(status=201)
+        return SuccessfulResponse(serializer.data)
 
 
-class OrderRetrieve(APIView):
+class OrderRetrieveDestroyAPIView(APIView):
     def get(self, request, pk):
         try:
             queryset = Order.objects.get(pk=pk)
         except Order.DoesNotExist:
-            return HttpResponse(status=404)
+            return ERROR.ORDER_DOES_NOT_EXIST
         serializer = OrderSerializer(queryset)
-        return Response(serializer.data)
+        return SuccessfulResponse(serializer.data)
 
-
-class OrderDestroy(APIView):
     def delete(self, request, pk):
         try:
             queryset = Order.objects.get(pk=pk)
         except Order.DoesNotExist:
-            return HttpResponse(status=404)
+            return ERROR.ORDER_DOES_NOT_EXIST
         queryset.remove()
-        return HttpResponse(status=200)
+        return SuccessfulResponse()
+
