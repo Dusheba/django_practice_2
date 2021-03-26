@@ -35,5 +35,5 @@ class GoodViewSet(viewsets.ViewSet):
             queryset = Good.objects.get(pk=pk)
         except Good.DoesNotExist:
             return ERROR.GOOD_DOES_NOT_EXIST
-        queryset.remove()
+        queryset.delete()
         return SuccessfulResponse()

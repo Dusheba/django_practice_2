@@ -18,7 +18,7 @@ class OrderListCreateAPIView(APIView):
         return SuccessfulResponse(serializer.data)
 
     def post(self, request):
-        serializer = OrderSerializer(data=request.POST)
+        serializer = OrderSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return SuccessfulResponse(serializer.data)
@@ -38,5 +38,5 @@ class OrderRetrieveDestroyAPIView(APIView):
             queryset = Order.objects.get(pk=pk)
         except Order.DoesNotExist:
             return ERROR.ORDER_DOES_NOT_EXIST
-        queryset.remove()
+        queryset.delete()
         return SuccessfulResponse()
