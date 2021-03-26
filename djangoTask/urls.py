@@ -15,11 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
-from good import urls as g_urls
-from order import urls as o_urls
+
+from v1.v1_server import urls as v1_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r"^goods/", include(g_urls)),
-    re_path(r"^orders/", include(o_urls)),
+    re_path(r"^v1/", include(v1_urls)),
 ]
